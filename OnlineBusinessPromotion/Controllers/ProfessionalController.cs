@@ -44,16 +44,19 @@ namespace OnlineBusinessPromotion.Controllers
 
         }
 
-        // PUT api/<ProfessionalController>/5
+        // עדכון מקצוען לפי מזהה
         [HttpPut("{id}")]
-        public void Put(int id, [FromForm] string value)
+        public void Put(int id, [FromForm] ProfessionalsDto professional)
         {
+            UploadImage(professional.fileImage); // במידה והמשתמש משנה תמונה
+            service.UpdateItem(id, professional);
         }
 
-        // DELETE api/<ProfessionalController>/5
+        // מחיקה לפי מזהה
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            service.DeleteItem(id);
         }
         private void UploadImage(IFormFile file)
         {

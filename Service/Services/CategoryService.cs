@@ -15,14 +15,18 @@ namespace Service.Services
     {
         private readonly IRepository<Category> repository;
         private readonly IMapper mapper; 
-        public CategoryService(IRepository<Category> repository)
+        public CategoryService(IRepository<Category> repository,IMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
         public CategoryDto AddItem(CategoryDto item)
         {
-            //מחזיר אוביוקט מסוג categorydto ןלכן בצענו המרה בחזרה אחרי שכשמתי שהוספנו המרנו לcategory
-            return mapper.Map<Category, CategoryDto>(repository.AddItem(mapper.Map<CategoryDto, Category>(item)));
+            // ממפה את ה-DTO לאובייקט קטגוריה מסוג Entity
+            Category c = repository.AddItem(mapper.Map<CategoryDto, Category>(item));
+
+            // מחזיר את הקטגוריה החדש אחרי השמירה, במבנה DTO
+            return mapper.Map<Category, CategoryDto>(c);
         }
 
         public void DeleteItem(int id)

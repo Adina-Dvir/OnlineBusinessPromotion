@@ -15,5 +15,6 @@ namespace Repository.Entities
         public string UserEmail { get; set; }
         public string UserPassword { get; set; }
         public User() { }
+       
     }
 }

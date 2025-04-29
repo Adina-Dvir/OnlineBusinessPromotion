@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Interfaces
 {
-    //ממשק שמתאר את הנתונים
+    //ממשק שמתאר את הנתונים  
     public interface IContext
     {
         public DbSet<Professionals> Professionals { get; set; }
