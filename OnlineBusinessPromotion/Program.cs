@@ -7,11 +7,10 @@ using Repository.Repositories;
 using Service.Interfaces;
 using Service.Services;
 using Common.Dto;
+using Nest;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
-builder.Services.AddControllers();
 
 // Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -44,26 +43,14 @@ builder.Services.AddSwaggerGen(option =>
 });
 
 // Dependency Injection
+builder.Services.AddControllers();        // ? מוסיף את התמיכה ב־API Controllers
+builder.Services.AddServices();
+builder.Services.AddRepository();
 
-// Professional Service
-builder.Services.AddScoped<IService<ProfessionalsDto>, ProfessionalService>();
 
-// Professional Repository
-builder.Services.AddScoped<IRepository<Professionals>, ProfessionalsRepository>();
-//UserService
-builder.Services.AddScoped<IService<UserDto>, UserService>();
-//UserRepository
-builder.Services.AddScoped<IRepository<User>, UserRepository>();
-//CategoryService
-builder.Services.AddScoped<IService<CategoryDto>, CategoryService>();
-
-//CategoryRepositotry
-builder.Services.AddScoped<IRepository<Category>, CategoryRepositotry>();
 //IContext
 builder.Services.AddScoped<IContext, Database>();
 
-// AutoMapper
-builder.Services.AddAutoMapper(typeof(MyMapper));
 
 // DbContext
 builder.Services.AddDbContext<IContext, Database>();

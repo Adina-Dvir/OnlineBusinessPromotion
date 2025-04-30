@@ -34,6 +34,11 @@ namespace Service.Services
 
             // ✅ מיפוי של CategoryDto ➡️ Category
             CreateMap<CategoryDto, Category>();
+            // ✅ מיפוי של Comment ➡️ CommentDto (מיפוי פשוט, אין בו תמונה כרגע)
+            CreateMap<Comment, CommentDto>();
+
+            // ✅ מיפוי של CommentDto ➡️ Comment
+            CreateMap<CommentDto, Comment>();
 
 
         }
