@@ -1,4 +1,5 @@
 ﻿using Common.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Repository.Entities;
 using Repository.Interfaces;
@@ -35,7 +36,7 @@ namespace OnlineBusinessPromotion.Controllers
 
         // POST api/<ProfessionalController>
         [HttpPost]
-       
+        [Authorize]
         public ProfessionalsDto Post([FromForm] ProfessionalsDto professional)
         {
             UploadImage(professional.fileImage);
@@ -46,6 +47,7 @@ namespace OnlineBusinessPromotion.Controllers
 
         // עדכון מקצוען לפי מזהה
         [HttpPut("{id}")]
+        [Authorize]
         public void Put(int id, [FromForm] ProfessionalsDto professional)
         {
             UploadImage(professional.fileImage); // במידה והמשתמש משנה תמונה
@@ -54,6 +56,7 @@ namespace OnlineBusinessPromotion.Controllers
 
         // מחיקה לפי מזהה
         [HttpDelete("{id}")]
+        [Authorize]
         public void Delete(int id)
         {
             service.DeleteItem(id);
