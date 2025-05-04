@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
+
     public class EmailDetailsRepository
     {
 

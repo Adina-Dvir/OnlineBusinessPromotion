@@ -25,20 +25,14 @@ namespace Service.Services
             // שומר רק את שם הקובץ (FileName) לתוך ImageUrls
             CreateMap<ProfessionalsDto, Professionals>().ForMember("ImageUrls", x => x.MapFrom(y => y.fileImage.FileName));
             // ✅ מיפוי של User ➡️ UserDto (מיפוי פשוט, אין בו תמונה כרגע)
-            CreateMap<User, UserDto>();
+            CreateMap<User, UserDto>().ReverseMap();
 
-            // ✅ מיפוי של UserDto ➡️ User
-            CreateMap<UserDto, User>();
             // ✅ מיפוי של Category ➡️ CategoryDto (מיפוי פשוט, אין בו תמונה כרגע)
-            CreateMap<Category, CategoryDto>();
+            CreateMap<Category, CategoryDto>().ReverseMap();
 
-            // ✅ מיפוי של CategoryDto ➡️ Category
-            CreateMap<CategoryDto, Category>();
             // ✅ מיפוי של Comment ➡️ CommentDto (מיפוי פשוט, אין בו תמונה כרגע)
-            CreateMap<Comment, CommentDto>();
+            CreateMap<Comment, CommentDto>().ReverseMap();
 
-            // ✅ מיפוי של CommentDto ➡️ Comment
-            CreateMap<CommentDto, Comment>();
 
 
         }

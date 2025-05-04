@@ -1,0 +1,91 @@
+﻿using Common.Dto;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using Service.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace OnlineBusinessPromotion.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LoginController : ControllerBase
+    {
+        private readonly IService<UserDto> service;
+        private readonly IConfiguration config;
+        public LoginController(IService<UserDto> service,IConfiguration config)
+        {
+            this.service = service;
+            this.config = config;
+        }
+        // GET: api/<LoginController>
+        [HttpGet]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        // GET api/<LoginController>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            return "value";
+        }
+
+        // POST api/<LoginController>
+        [HttpPost]
+        public void Post([FromBody] UserDto user)
+        {
+            service.AddItem(user);
+        }
+        // POST api/<LoginController>
+        [HttpPost("/login")]
+        public string Login([FromBody] UserLogin ul)
+        {
+            var user=Authenticate(ul);
+            var token = Generate(user);
+            return token;
+        }
+
+        private string Generate(UserDto user)
+        {
+            var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
+            var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
+            var claims = new[] {
+            new Claim(ClaimTypes.Name,user.UserName),
+            new Claim(ClaimTypes.Email,user.UserEmail),
+            //new Claim(ClaimTypes.Name,user.Name),
+            //new Claim(ClaimTypes.GivenName,user.Name)
+            };
+            var token = new JwtSecurityToken(config["Jwt:Issuer"], config["Jwt:Audience"],
+                claims,
+                expires: DateTime.Now.AddMinutes(15),
+                signingCredentials: credentials);
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        //האם המשתמש קיים?
+        private UserDto Authenticate(UserLogin ul)
+        {
+            UserDto user=service.GetAll().FirstOrDefault(x=>x.UserPassword==ul.Password&&x.UserEmail==ul.UserMail);
+            if (user != null)
+                return user;
+            return null;
+        }
+
+
+        // PUT api/<LoginController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        // DELETE api/<LoginController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
+    }
+}
