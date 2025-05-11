@@ -42,7 +42,7 @@ namespace Service.Services
         public async Task<UserDto> AddItem(UserDto item)
         {
             // ממפה את ה-DTO לאובייקט יוזר מסוג Entity
-            User u = repository.AddItem(mapper.Map<UserDto, User>(item));
+            User u =await repository.AddItem(mapper.Map<UserDto, User>(item));
 
             // מחזיר את היוזר החדש אחרי השמירה, במבנה DTO
             return mapper.Map<User, UserDto>(u);
@@ -57,13 +57,13 @@ namespace Service.Services
         // מחזיר רשימה של כל היוזרים
         public async Task< List<UserDto> >GetAll()
         {
-            return await mapper.Map<List<User>, List<UserDto>>(repository.GetAll());
+            return  mapper.Map<List<User>, List<UserDto>>(await repository.GetAll());
         }
 
         // מחזיר יוזר בודד לפי מזהה
         public async Task <UserDto> GetById(int id)
         {
-            return await mapper.Map<User, UserDto>(repository.GetById(id));
+            return  mapper.Map<User, UserDto>(await repository.GetById(id));
         }
 
         // עדכון פרטי יוזר לפי מזהה

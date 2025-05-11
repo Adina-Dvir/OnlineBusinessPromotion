@@ -1,4 +1,5 @@
-﻿using Repository.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Repository.Entities;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -27,18 +28,18 @@ namespace Repository.Repositories
 
         public async Task DeleteItem(int id)
         {
-            await this.context.Professionals.Remove(await GetById(id));
+             this.context.Professionals.Remove(await GetById(id));
             await this.context.Save();
         }
 
         public async Task<List<Professionals>> GetAll()
         {
-            return this.context.Professionals.ToListAsync();
+            return await this.context.Professionals.ToListAsync();
         }
 
         public async Task<Professionals> GetById(int id)
         {
-            return this.context.Professionals.FirstOrDefaultAsync(x => x.ProfessionalId == id);
+            return await this.context.Professionals.FirstOrDefaultAsync(x => x.ProfessionalId == id);
         }
 
         public async Task UpdateItem(int id, Professionals item)

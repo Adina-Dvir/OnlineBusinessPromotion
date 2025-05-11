@@ -52,7 +52,7 @@ namespace Service.Services
             Professionals p = await repository.AddItem(mapper.Map<ProfessionalsDto, Professionals>(item));
 
             // מחזיר את האובייקט החדש אחרי שמירה, במבנה DTO
-            return await mapper.Map<Professionals, ProfessionalsDto>(p);
+            return  mapper.Map<Professionals, ProfessionalsDto>(p);
         }
 
         // מחיקת מקצוען לפי מזהה
@@ -64,13 +64,13 @@ namespace Service.Services
         // מחזיר רשימה של כל המקצוענים
         public async Task<List<ProfessionalsDto>> GetAll()
         {
-            return await mapper.Map<List<Professionals>, List<ProfessionalsDto>>(repository.GetAll());
+            return  mapper.Map<List<Professionals>, List<ProfessionalsDto>>(await repository.GetAll());
         }
 
         // מחזיר מקצוען בודד לפי מזהה
         public async Task<ProfessionalsDto> GetById(int id)
         {
-            return await mapper.Map<Professionals, ProfessionalsDto>(repository.GetById(id));
+            return  mapper.Map<Professionals, ProfessionalsDto>(await repository.GetById(id));
         }
 
         // עדכון מקצוען קיים לפי מזהה

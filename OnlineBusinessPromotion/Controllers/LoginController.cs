@@ -5,6 +5,8 @@ using Service.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -42,11 +44,11 @@ namespace OnlineBusinessPromotion.Controllers
             await service.AddItem(user);
         }
         // POST api/<LoginController>
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<string> Login([FromBody] UserLogin ul)
         {
-            var user=Authenticate(ul);
-            var token = Generate(user);
+            var user=await Authenticate(ul);
+            var token =  Generate(user);
             return token;
         }
 
@@ -69,7 +71,8 @@ namespace OnlineBusinessPromotion.Controllers
         //האם המשתמש קיים?
         private async Task< UserDto> Authenticate(UserLogin ul)
         {
-            UserDto user= await service.GetAll().FirstOrDefault(x=>x.UserPassword==ul.Password&&x.UserEmail==ul.UserMail);
+            var allUsers = await service.GetAll();
+            var user = allUsers.FirstOrDefault(x => x.UserPassword == ul.Password && x.UserEmail == ul.UserMail);
             if (user != null)
                 return user;
             return null;

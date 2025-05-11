@@ -36,12 +36,12 @@ namespace Service.Services
 
         public async Task< List<CategoryDto>> GetAll()
         {
-            return await mapper.Map<List<Category>,List<CategoryDto>>( repository.GetAll());
+            return  mapper.Map<List<Category>,List<CategoryDto>>(await repository.GetAll());
         }
 
         public async Task< CategoryDto> GetById(int id)
         {
-            return await mapper.Map < Category, CategoryDto >( repository.GetById(id));
+            return  mapper.Map < Category, CategoryDto >(await repository.GetById(id));
         }
 
         public async Task UpdateItem(int id, CategoryDto item)

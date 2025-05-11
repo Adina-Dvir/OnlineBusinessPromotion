@@ -1,4 +1,5 @@
-﻿using Repository.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Repository.Entities;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace Repository.Repositories
 
         public async Task DeleteItem(int id)
         {
-            await this.context.Category.Remove(await GetById(id));
+            this.context.Category.Remove(await GetById(id));
             await this.context.Save();
         }
 
@@ -38,12 +39,12 @@ namespace Repository.Repositories
             return await this.context.Category.ToListAsync();
         }
 
-        public Task<Category> GetById(int id)
+        public async Task<Category> GetById(int id)
         {
-            return await this.context.Category.FirstOrDefaultAsync(x => x.CategoryId == id);
+            return  await this.context.Category.FirstOrDefaultAsync(x => x.CategoryId == id);
         }
 
-        public Task UpdateItem(int id, Category item)
+        public async Task UpdateItem(int id, Category item)
         {
             var category = await this.GetById(id);
             category.CategoryDescription = item.CategoryDescription;

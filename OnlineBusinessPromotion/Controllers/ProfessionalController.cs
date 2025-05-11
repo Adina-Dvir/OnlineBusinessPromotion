@@ -64,7 +64,7 @@ namespace OnlineBusinessPromotion.Controllers
         private async Task UploadImage(IFormFile file)
         {
             //ניתוב לתמונה
-            var path = await Path.Combine(Environment.CurrentDirectory, "Images/", file.FileName);
+            var path =  Path.Combine(Environment.CurrentDirectory, "Images/", file.FileName);
             using (var stream = new FileStream(path, FileMode.Create))
             {
 

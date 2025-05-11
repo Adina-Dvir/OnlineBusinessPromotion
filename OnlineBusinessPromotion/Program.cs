@@ -56,8 +56,7 @@ builder.Services.AddRepository();
 builder.Services.AddScoped<IContext, Database>();
 
 
-// DbContext
-builder.Services.AddDbContext<IContext, Database>();
+
 
 // CORS
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -74,7 +73,6 @@ builder.Services.AddCors(options =>
 
 // Authorization Middleware
 builder.Services.AddAuthorization();
-
 var app = builder.Build();
 
 // Configure HTTP request pipeline
@@ -84,6 +82,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+// DbContext
+builder.Services.AddDbContext<IContext, Database>();
+app.UseRouting();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);

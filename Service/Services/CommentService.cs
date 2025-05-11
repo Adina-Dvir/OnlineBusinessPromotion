@@ -59,13 +59,13 @@ namespace Service.Services
         // מחזיר רשימה של כל היוזרים
         public async Task<List<CommentDto> >GetAll()
         {
-            return await mapper.Map<List<Comment>, List<CommentDto>>(repository.GetAll());
+            return  mapper.Map<List<Comment>, List<CommentDto>>(await repository.GetAll());
         }
 
         // מחזיר יוזר בודד לפי מזהה
         public async Task<CommentDto> GetById(int id)
         {
-            return await mapper.Map<Comment, CommentDto>(repository.GetById(id));
+            return  mapper.Map<Comment, CommentDto>(await repository.GetById(id));
         }
 
         // עדכון פרטי יוזר לפי מזהה

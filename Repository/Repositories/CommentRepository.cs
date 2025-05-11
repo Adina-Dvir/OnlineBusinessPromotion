@@ -1,4 +1,5 @@
-﻿using Repository.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Repository.Entities;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -24,7 +25,7 @@ namespace Repository.Repositories
 
         public async Task DeleteItem(int id)
         {
-            await this.context.Comments.Remove(await GetById(id));
+             this.context.Comments.Remove(await GetById(id));
             await this.context.Save();
         }
 
