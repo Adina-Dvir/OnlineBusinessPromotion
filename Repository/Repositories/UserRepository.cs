@@ -15,36 +15,36 @@ namespace Repository.Repositories
         {
             this.context = context;
         }
-        public User AddItem(User item)
+        public async Task<User >AddItem(User item)
         {
-            this.context.Users.Add(item);
-            this.context.Save();
+            await this.context.Users.AddAsync(item);
+            await this.context.Save();
             return item;
         }
 
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            this.context.Users.Remove(GetById(id));
-            this.context.Save();
+            await this.context.Users.Remove(GetById(id));
+            await this.context.Save();
         }
 
-        public List<User> GetAll()
+        public async Task<List<User> >GetAll()
         {
-            return this.context.Users.ToList();
+            return await this.context.Users.ToListAsync();
         }
 
-        public User GetById(int id)
+        public async Task<User > GetById(int id)
         {
-            return this.context.Users.FirstOrDefault(x=>x.UserId==id);
+            return await this.context.Users.FirstOrDefaultAsync(x=>x.UserId==id);
         }
 
-        public void UpdateItem(int id, User item)
+        public async Task UpdateItem(int id, User item)
         {
-            var user = this.GetById(id);
+            var user = await this.GetById(id);
             user.UserName = item.UserName;
             user.UserPassword = item.UserPassword;
             user.UserEmail = item.UserEmail;
-            context.Save();
+            await context.Save();
         }
     }
 }

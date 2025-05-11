@@ -8,39 +8,39 @@ using System.Threading.Tasks;
 
 namespace Repository.Repositories
 {
-    public class CommentRepository : IRepository<Comment>
+    public  class CommentRepository : IRepository<Comment>
     {
         private readonly IContext context;
         public CommentRepository(IContext context) 
         {
             this.context = context;
         }
-        public Comment AddItem(Comment item)
+        public async Task< Comment > AddItem(Comment item)
         {
-            context.Comments.Add(item);
-            context.Save();
+            await context.Comments.AddAsync(item);
+            await context.Save();
             return item;
         }
 
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            this.context.Comments.Remove(GetById(id));
-            this.context.Save();
+            await this.context.Comments.Remove(await GetById(id));
+            await this.context.Save();
         }
 
-        public List<Comment> GetAll()
+        public async Task<List<Comment>> GetAll()
         {
-            return this.context.Comments.ToList();
+            return await this.context.Comments.ToListAsync();
         }
 
-        public Comment GetById(int id)
+        public async Task<Comment> GetById(int id)
         {
-            return this.context.Comments.FirstOrDefault(x => x.CommentId == id);
+            return await this.context.Comments.FirstOrDefaultAsync(x => x.CommentId == id);
         }
 
-        public void UpdateItem(int id, Comment item)
+        public async Task UpdateItem(int id, Comment item)
         {
-
+            
 
         }
     }

@@ -39,7 +39,7 @@ namespace Service.Services
         }
 
         // הוספת יוזר חדש למערכת
-        public UserDto AddItem(UserDto item)
+        public async Task<UserDto> AddItem(UserDto item)
         {
             // ממפה את ה-DTO לאובייקט יוזר מסוג Entity
             User u = repository.AddItem(mapper.Map<UserDto, User>(item));
@@ -49,27 +49,27 @@ namespace Service.Services
         }
 
         // מחיקת יוזר לפי מזהה
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            repository.DeleteItem(id);
+            await repository.DeleteItem(id);
         }
 
         // מחזיר רשימה של כל היוזרים
-        public List<UserDto> GetAll()
+        public async Task< List<UserDto> >GetAll()
         {
-            return mapper.Map<List<User>, List<UserDto>>(repository.GetAll());
+            return await mapper.Map<List<User>, List<UserDto>>(repository.GetAll());
         }
 
         // מחזיר יוזר בודד לפי מזהה
-        public UserDto GetById(int id)
+        public async Task <UserDto> GetById(int id)
         {
-            return mapper.Map<User, UserDto>(repository.GetById(id));
+            return await mapper.Map<User, UserDto>(repository.GetById(id));
         }
 
         // עדכון פרטי יוזר לפי מזהה
-        public void UpdateItem(int id, UserDto item)
+        public async Task UpdateItem(int id, UserDto item)
         {
-            repository.UpdateItem(id, mapper.Map<UserDto, User>(item));
+            await repository.UpdateItem(id, mapper.Map<UserDto, User>(item));
         }
     }
 }

@@ -40,10 +40,10 @@ namespace Service.Services
         }
 
         // הוספת יוזר חדש למערכת
-        public CommentDto AddItem(CommentDto item)
+        public async Task <CommentDto> AddItem(CommentDto item)
         {
             // ממפה את ה-DTO לאובייקט יוזר מסוג Entity
-            Comment c = repository.AddItem(mapper.Map<CommentDto, Comment>(item));
+            Comment c =await repository.AddItem(mapper.Map<CommentDto, Comment>(item));
 
             // מחזיר את היוזר החדש אחרי השמירה, במבנה DTO
             return mapper.Map<Comment, CommentDto>(c);
@@ -51,27 +51,27 @@ namespace Service.Services
 
 
         // מחיקת יוזר לפי מזהה
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            repository.DeleteItem(id);
+            await  repository.DeleteItem(id);
         }
 
         // מחזיר רשימה של כל היוזרים
-        public List<CommentDto> GetAll()
+        public async Task<List<CommentDto> >GetAll()
         {
-            return mapper.Map<List<Comment>, List<CommentDto>>(repository.GetAll());
+            return await mapper.Map<List<Comment>, List<CommentDto>>(repository.GetAll());
         }
 
         // מחזיר יוזר בודד לפי מזהה
-        public CommentDto GetById(int id)
+        public async Task<CommentDto> GetById(int id)
         {
-            return mapper.Map<Comment, CommentDto>(repository.GetById(id));
+            return await mapper.Map<Comment, CommentDto>(repository.GetById(id));
         }
 
         // עדכון פרטי יוזר לפי מזהה
-        public void UpdateItem(int id, CommentDto item)
+        public async Task UpdateItem(int id, CommentDto item)
         {
-            repository.UpdateItem(id, mapper.Map<CommentDto, Comment>(item));
+            await repository.UpdateItem(id, mapper.Map<CommentDto, Comment>(item));
         }
 
     }

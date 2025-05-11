@@ -10,10 +10,10 @@ namespace Service.Interfaces
     //הלוגיקה העיסקית כאן
     public interface IService<T>
     {
-        T GetById(int id);
-        List<T> GetAll();
-        T AddItem(T item);
-        void UpdateItem(int id, T item);
-        void DeleteItem(int id);
+       Task< T> GetById(int id);
+       Task<List<T>> GetAll();
+        Task< T> AddItem(T item);
+        Task UpdateItem(int id, T item);
+        Task DeleteItem(int id);
     }
 }

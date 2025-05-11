@@ -46,37 +46,37 @@ namespace Service.Services
         }
 
         // הוספת מקצוען חדש למערכת
-        public ProfessionalsDto AddItem(ProfessionalsDto item)
+        public async Task<ProfessionalsDto> AddItem(ProfessionalsDto item)
         {
             // ממפה את ה-DTO לאובייקט ישות
-            Professionals p = repository.AddItem(mapper.Map<ProfessionalsDto, Professionals>(item));
+            Professionals p = await repository.AddItem(mapper.Map<ProfessionalsDto, Professionals>(item));
 
             // מחזיר את האובייקט החדש אחרי שמירה, במבנה DTO
-            return mapper.Map<Professionals, ProfessionalsDto>(p);
+            return await mapper.Map<Professionals, ProfessionalsDto>(p);
         }
 
         // מחיקת מקצוען לפי מזהה
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            repository.DeleteItem(id);
+            await repository.DeleteItem(id);
         }
 
         // מחזיר רשימה של כל המקצוענים
-        public List<ProfessionalsDto> GetAll()
+        public async Task<List<ProfessionalsDto>> GetAll()
         {
-            return mapper.Map<List<Professionals>, List<ProfessionalsDto>>(repository.GetAll());
+            return await mapper.Map<List<Professionals>, List<ProfessionalsDto>>(repository.GetAll());
         }
 
         // מחזיר מקצוען בודד לפי מזהה
-        public ProfessionalsDto GetById(int id)
+        public async Task<ProfessionalsDto> GetById(int id)
         {
-            return mapper.Map<Professionals, ProfessionalsDto>(repository.GetById(id));
+            return await mapper.Map<Professionals, ProfessionalsDto>(repository.GetById(id));
         }
 
         // עדכון מקצוען קיים לפי מזהה
-        public void UpdateItem(int id, ProfessionalsDto item)
+        public async Task UpdateItem(int id, ProfessionalsDto item)
         {
-            repository.UpdateItem(id, mapper.Map<ProfessionalsDto, Professionals>(item));
+            await repository.UpdateItem(id, mapper.Map<ProfessionalsDto, Professionals>(item));
         }
     }
 }

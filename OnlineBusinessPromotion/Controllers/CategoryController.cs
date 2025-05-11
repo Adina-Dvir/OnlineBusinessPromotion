@@ -18,37 +18,37 @@ namespace OnlineBusinessPromotion.Controllers
 
         // GET: api/<CategoryController>
         [HttpGet]
-        public List<CategoryDto> Get()
+        public async Task< List<CategoryDto>> Get()
         {
-            return service.GetAll();
+            return await service.GetAll();
         }
 
         // GET api/<CategoryController>/5
         [HttpGet("{id}")]
-        public CategoryDto Get(int id)
+        public async Task< CategoryDto> Get(int id)
         {
-            return service.GetById(id);
+            return await service.GetById(id);
         }
 
         // POST api/<CategoryController>
         [HttpPost]
-        public CategoryDto Post([FromBody] CategoryDto category)
+        public async Task<CategoryDto >Post([FromBody] CategoryDto category)
         {
-           return service.AddItem(category);
+            return await service.AddItem(category);
         }
 
         // PUT api/<CategoryController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] CategoryDto category)
+        public async Task Put(int id, [FromBody] CategoryDto category)
         {
-            service.UpdateItem(id, category);
+            await service.UpdateItem(id, category);
         }
 
         // DELETE api/<CategoryController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            service.DeleteItem(id);
+            await service.DeleteItem(id);
         }
     }
 }

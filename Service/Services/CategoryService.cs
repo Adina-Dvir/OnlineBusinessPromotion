@@ -20,33 +20,33 @@ namespace Service.Services
             this.repository = repository;
             this.mapper = mapper;
         }
-        public CategoryDto AddItem(CategoryDto item)
+        public async Task< CategoryDto> AddItem(CategoryDto item)
         {
             // ממפה את ה-DTO לאובייקט קטגוריה מסוג Entity
-            Category c = repository.AddItem(mapper.Map<CategoryDto, Category>(item));
+            Category c = await repository.AddItem(mapper.Map<CategoryDto, Category>(item));
 
             // מחזיר את הקטגוריה החדש אחרי השמירה, במבנה DTO
             return mapper.Map<Category, CategoryDto>(c);
         }
 
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            repository.DeleteItem(id);
+            await repository.DeleteItem(id);
         }
 
-        public List<CategoryDto> GetAll()
+        public async Task< List<CategoryDto>> GetAll()
         {
-            return mapper.Map<List<Category>,List<CategoryDto>>( repository.GetAll());
+            return await mapper.Map<List<Category>,List<CategoryDto>>( repository.GetAll());
         }
 
-        public CategoryDto GetById(int id)
+        public async Task< CategoryDto> GetById(int id)
         {
-            return mapper.Map < Category, CategoryDto >( repository.GetById(id));
+            return await mapper.Map < Category, CategoryDto >( repository.GetById(id));
         }
 
-        public void UpdateItem(int id, CategoryDto item)
+        public async Task UpdateItem(int id, CategoryDto item)
         {
-            repository.UpdateItem(id, mapper.Map<CategoryDto, Category>(item));
+            await repository.UpdateItem(id, mapper.Map<CategoryDto, Category>(item));
         }
     }
 }

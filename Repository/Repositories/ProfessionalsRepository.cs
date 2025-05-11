@@ -16,34 +16,34 @@ namespace Repository.Repositories
             this.context = context;
         }
 
-        public Professionals AddItem(Professionals item)
+        public async Task<Professionals >AddItem(Professionals item)
         {
-            this.context.Professionals.Add(item);
+            await this.context.Professionals.AddAsync(item);
             Console.WriteLine($"City value before saving: {item.City}");
             item.FixNullStrings();
-            this.context.Save();
+            await this.context.Save();
             return item;
         }
 
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            this.context.Professionals.Remove(GetById(id));
-            this.context.Save();
+            await this.context.Professionals.Remove(await GetById(id));
+            await this.context.Save();
         }
 
-        public List<Professionals> GetAll()
+        public async Task<List<Professionals>> GetAll()
         {
-            return this.context.Professionals.ToList();
+            return this.context.Professionals.ToListAsync();
         }
 
-        public Professionals GetById(int id)
+        public async Task<Professionals> GetById(int id)
         {
-            return this.context.Professionals.FirstOrDefault(x => x.ProfessionalId == id);
+            return this.context.Professionals.FirstOrDefaultAsync(x => x.ProfessionalId == id);
         }
 
-        public void UpdateItem(int id, Professionals item)
+        public async Task UpdateItem(int id, Professionals item)
         {
-            var professionals = this.GetById(id);
+            var professionals = await this.GetById(id);
             professionals.ProfessionalPhone = item.ProfessionalPhone;
             professionals.ProfessionalPlace = item.ProfessionalPlace;
             professionals.ProfessionalDescription = item.ProfessionalDescription;

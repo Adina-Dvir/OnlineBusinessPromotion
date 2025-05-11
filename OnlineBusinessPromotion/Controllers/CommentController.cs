@@ -17,37 +17,37 @@ namespace OnlineBusinessPromotion.Controllers
         }
         // GET: api/<CommentController>
         [HttpGet]
-        public List<CommentDto> Get()
+        public async Task<List<CommentDto> >Get()
         {
-            return service.GetAll();
+            return await service.GetAll();
         }
 
         // GET api/<CommentController>/5
         [HttpGet("{id}")]
-        public CommentDto Get(int id)
+        public async Task<CommentDto> Get(int id)
         {
-            return service.GetById(id);
+            return await service.GetById(id);
         }
 
         // POST api/<CommentController>
         [HttpPost]
-        public CommentDto Post([FromBody] CommentDto comment)
+        public async Task<CommentDto> Post([FromBody] CommentDto comment)
         {
-            return service.AddItem(comment);
+            return await service.AddItem(comment);
         }
 
         // PUT api/<CommentController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] CommentDto comment)
+        public async Task Put(int id, [FromBody] CommentDto comment)
         {
-            service.UpdateItem(id, comment);
+            await service.UpdateItem(id, comment);
         }
 
         // DELETE api/<CommentController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            service.DeleteItem(id);
+            await service.DeleteItem(id);
         }
     }
 }

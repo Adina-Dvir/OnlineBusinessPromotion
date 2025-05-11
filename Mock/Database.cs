@@ -18,9 +18,9 @@ namespace Mock
         public DbSet<EmailDetails> EmailDetails { get; set; }
         public DbSet<Category> Category { get; set; }
 
-        public void Save()
+        public async Task Save()
         {
-            SaveChanges();
+           await SaveChangesAsync();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

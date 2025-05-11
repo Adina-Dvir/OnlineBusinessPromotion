@@ -22,49 +22,49 @@ namespace OnlineBusinessPromotion.Controllers
         }
         // GET: api/<ProfessionalController>
         [HttpGet]
-        public List<ProfessionalsDto> Get()
+        public async Task< List<ProfessionalsDto>> Get()
         {
-            return service.GetAll();
+            return await service.GetAll();
         }
 
         // GET api/<ProfessionalController>/5
         [HttpGet("{id}")]
-        public ProfessionalsDto Get(int id)
+        public async Task<ProfessionalsDto> Get(int id)
         {
-            return service.GetById(id);
+            return await service.GetById(id);
         }
 
         // POST api/<ProfessionalController>
         [HttpPost]
         [Authorize]
-        public ProfessionalsDto Post([FromForm] ProfessionalsDto professional)
+        public async Task <ProfessionalsDto> Post([FromForm] ProfessionalsDto professional)
         {
-            UploadImage(professional.fileImage);
+            await UploadImage(professional.fileImage);
 
-            return service.AddItem(professional);
+            return await service.AddItem(professional);
 
         }
 
         // עדכון מקצוען לפי מזהה
         [HttpPut("{id}")]
         [Authorize]
-        public void Put(int id, [FromForm] ProfessionalsDto professional)
+        public async Task Put(int id, [FromForm] ProfessionalsDto professional)
         {
-            UploadImage(professional.fileImage); // במידה והמשתמש משנה תמונה
-            service.UpdateItem(id, professional);
+            await UploadImage(professional.fileImage); // במידה והמשתמש משנה תמונה
+            await service.UpdateItem(id, professional);
         }
 
         // מחיקה לפי מזהה
         [HttpDelete("{id}")]
         [Authorize]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            service.DeleteItem(id);
+            await service.DeleteItem(id);
         }
-        private void UploadImage(IFormFile file)
+        private async Task UploadImage(IFormFile file)
         {
             //ניתוב לתמונה
-            var path = Path.Combine(Environment.CurrentDirectory, "Images/", file.FileName);
+            var path = await Path.Combine(Environment.CurrentDirectory, "Images/", file.FileName);
             using (var stream = new FileStream(path, FileMode.Create))
             {
 

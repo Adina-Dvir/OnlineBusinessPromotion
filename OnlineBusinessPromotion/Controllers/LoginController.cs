@@ -30,20 +30,20 @@ namespace OnlineBusinessPromotion.Controllers
 
         // GET api/<LoginController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task< string> Get(int id)
         {
             return "value";
         }
 
         // POST api/<LoginController>
         [HttpPost]
-        public void Post([FromBody] UserDto user)
+        public async Task Post([FromBody] UserDto user)
         {
-            service.AddItem(user);
+            await service.AddItem(user);
         }
         // POST api/<LoginController>
         [HttpPost("/login")]
-        public string Login([FromBody] UserLogin ul)
+        public async Task<string> Login([FromBody] UserLogin ul)
         {
             var user=Authenticate(ul);
             var token = Generate(user);
@@ -67,9 +67,9 @@ namespace OnlineBusinessPromotion.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
         //האם המשתמש קיים?
-        private UserDto Authenticate(UserLogin ul)
+        private async Task< UserDto> Authenticate(UserLogin ul)
         {
-            UserDto user=service.GetAll().FirstOrDefault(x=>x.UserPassword==ul.Password&&x.UserEmail==ul.UserMail);
+            UserDto user= await service.GetAll().FirstOrDefault(x=>x.UserPassword==ul.Password&&x.UserEmail==ul.UserMail);
             if (user != null)
                 return user;
             return null;
@@ -78,13 +78,13 @@ namespace OnlineBusinessPromotion.Controllers
 
         // PUT api/<LoginController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task Put(int id, [FromBody] string value)
         {
         }
 
         // DELETE api/<LoginController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
         }
     }

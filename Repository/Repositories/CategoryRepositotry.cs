@@ -20,35 +20,35 @@ namespace Repository.Repositories
             this.context = context;
         }
 
-        public Category AddItem(Category item)
+        public async Task< Category> AddItem(Category item)
         {
-            this.context.Category.Add(item);
-            this.context.Save();
+            await this.context.Category.AddAsync(item);
+            await this.context.Save();
             return item;
         }
 
-        public void DeleteItem(int id)
+        public async Task DeleteItem(int id)
         {
-            this.context.Category.Remove(GetById(id));
-            this.context.Save();
+            await this.context.Category.Remove(await GetById(id));
+            await this.context.Save();
         }
 
-        public List<Category> GetAll()
+        public async Task< List<Category>> GetAll()
         {
-            return this.context.Category.ToList();
+            return await this.context.Category.ToListAsync();
         }
 
-        public Category GetById(int id)
+        public Task<Category> GetById(int id)
         {
-            return this.context.Category.FirstOrDefault(x => x.CategoryId == id);
+            return await this.context.Category.FirstOrDefaultAsync(x => x.CategoryId == id);
         }
 
-        public void UpdateItem(int id, Category item)
+        public Task UpdateItem(int id, Category item)
         {
-            var category = this.GetById(id);
+            var category = await this.GetById(id);
             category.CategoryDescription = item.CategoryDescription;
             category.CategoryName = item.CategoryName;
-            context.Save();
+            await context.Save();
         }
     }
 }

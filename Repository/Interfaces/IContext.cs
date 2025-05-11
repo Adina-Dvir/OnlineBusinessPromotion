@@ -16,6 +16,6 @@ namespace Repository.Interfaces
         public DbSet<Comment> Comments { get; set; }
         public DbSet<EmailDetails> EmailDetails { get; set; }
         public DbSet<Category> Category { get; set; }
-        public void Save();
+        public Task Save();
     }
 }

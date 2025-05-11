@@ -18,38 +18,39 @@ namespace OnlineBusinessPromotion.Controllers
         }
         // GET: api/<UserController>
         [HttpGet]
-        public List<UserDto> Get()
+        public async Task <List<UserDto>> Get()
         {
-            return service.GetAll();
+            return await service.GetAll();
         }
 
         // GET api/<UserController>/5
         [HttpGet("{id}")]
-        public UserDto Get(int id)
+        public async Task<UserDto> Get(int id)
         {
-            return service.GetById(id);
+            return await service.GetById(id);
         }
 
         // POST api/<UserController>
         [HttpPost]
-        public UserDto Post([FromBody] UserDto user)
+        public async Task<UserDto> Post([FromBody] UserDto user)
         {
-            return service.AddItem(user);
+
+            return await service.AddItem(user);
 
         }
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] UserDto user)
+        public async Task Put(int id, [FromBody] UserDto user)
         {
-            service.UpdateItem(id, user);
+            await service.UpdateItem(id, user);
         }
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            service.DeleteItem(id);
+            await service.DeleteItem(id);
         }
 
     }
