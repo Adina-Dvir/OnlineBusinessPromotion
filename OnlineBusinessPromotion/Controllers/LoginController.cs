@@ -48,8 +48,13 @@ namespace OnlineBusinessPromotion.Controllers
         public async Task<string> Login([FromBody] UserLogin ul)
         {
             var user=await Authenticate(ul);
-            var token =  Generate(user);
-            return token;
+            if (user!=null)
+            {
+                var token =  Generate(user);
+                return token;
+
+            }
+            return "user not found or password is incorrect"
         }
 
         private string Generate(UserDto user)
