@@ -31,6 +31,7 @@ namespace OnlineBusinessPromotion.Controllers
         }
 
         // POST api/<CategoryController>
+
         [HttpPost]
         public async Task<CategoryDto >Post([FromBody] CategoryDto category)
         {

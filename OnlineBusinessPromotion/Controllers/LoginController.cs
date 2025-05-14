@@ -54,7 +54,7 @@ namespace OnlineBusinessPromotion.Controllers
                 return token;
 
             }
-            return "user not found or password is incorrect"
+            return "user not found or password is incorrect";
         }
 
         private string Generate(UserDto user)
@@ -67,11 +67,18 @@ namespace OnlineBusinessPromotion.Controllers
             //new Claim(ClaimTypes.Name,user.Name),
             //new Claim(ClaimTypes.GivenName,user.Name)
             };
-            var token = new JwtSecurityToken(config["Jwt:Issuer"], config["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: credentials);
+            //var token = new JwtSecurityToken(config["Jwt:Issuer"], config["Jwt:Audience"],
+            //    claims,
+            //    expires: DateTime.Now.AddMinutes(30),
+            //    signingCredentials: credentials);
+            var token = new JwtSecurityToken(
+             config["Jwt:Issuer"],
+             config["Jwt:Audience"],
+             claims,
+             expires: DateTime.Now.AddMinutes(30),
+             signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
+
         }
         //האם המשתמש קיים?
         private async Task< UserDto> Authenticate(UserLogin ul)
