@@ -44,18 +44,32 @@ namespace OnlineBusinessPromotion.Controllers
             await service.AddItem(user);
         }
         // POST api/<LoginController>
-        [HttpPost("login")]
-        public async Task<string> Login([FromBody] UserLogin ul)
-        {
-            var user=await Authenticate(ul);
-            if (user!=null)
-            {
-                var token =  Generate(user);
-                return token;
+       
+        // [HttpPost("login")]
+        //public async Task<string> Login([FromBody] UserLogin ul)
+        //{
+        //    var user=await Authenticate(ul);
+        //    if (user!=null)
+        //    {
+        //        var token =  Generate(user);
+        //        return token;
 
+        //    }
+        //    return "user not found or password is incorrect";
+        //}
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UserLogin ul)
+        {
+            var user = await Authenticate(ul);
+            if (user != null)
+            {
+                var token = Generate(user);
+                return Ok(new { token }); // יחזיר JSON: { "token": "..." }
             }
-            return "user not found or password is incorrect";
+
+            return BadRequest(new { message = "User not found or password is incorrect" });
         }
+
 
         private string Generate(UserDto user)
         {
@@ -64,7 +78,7 @@ namespace OnlineBusinessPromotion.Controllers
             var claims = new[] {
             new Claim(ClaimTypes.Name,user.UserName),
             new Claim(ClaimTypes.Email,user.UserEmail),
-            //new Claim(ClaimTypes.Name,user.Name),
+            new Claim(ClaimTypes.PostalCode,user.UserPassword),
             //new Claim(ClaimTypes.GivenName,user.Name)
             };
             //var token = new JwtSecurityToken(config["Jwt:Issuer"], config["Jwt:Audience"],
