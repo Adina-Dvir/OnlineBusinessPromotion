@@ -61,10 +61,12 @@ namespace OnlineBusinessPromotion.Controllers
         public async Task<IActionResult> Login([FromBody] UserLogin ul)
         {
             var user = await Authenticate(ul);
+            UserDto u=GetCurrentUser();
             if (user != null)
             {
                 var token = Generate(user);
-                return Ok(new { token }); // יחזיר JSON: { "token": "..." }
+              //  return Ok(new { token }); // יחזיר JSON: { "token": "..." }
+                return Ok(new { token, user = new { user.UserName, user.UserEmail, user.UserPassword } }); // יחזיר JSON: { "token": "...", "user": { "UserName": "...", "UserEmail": "...", "UserPassword": "..." } }
             }
 
             return BadRequest(new { message = "User not found or password is incorrect" });
@@ -93,6 +95,21 @@ namespace OnlineBusinessPromotion.Controllers
              signingCredentials: credentials);
             return new JwtSecurityTokenHandler().WriteToken(token);
 
+        }
+        private UserDto GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                var UserClaim = identity.Claims;
+                return new UserDto()
+                {
+                    UserName = UserClaim.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value,
+                    UserEmail = UserClaim.FirstOrDefault(x => x.Type == ClaimTypes.Email)?.Value,
+                    UserPassword = UserClaim.FirstOrDefault(x => x.Type == ClaimTypes.PostalCode)?.Value,
+                };
+            }
+            return null;
         }
         //האם המשתמש קיים?
         private async Task< UserDto> Authenticate(UserLogin ul)
