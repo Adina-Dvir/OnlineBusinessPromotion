@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Repository.Entities;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,9 @@ namespace Repository.Interfaces
         public DbSet<Comment> Comments { get; set; }
         public DbSet<EmailDetails> EmailDetails { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<ProfessionalClick> ProfessionalClick { get; set; }
+
         public Task Save();
+        EntityEntry Entry(object entity);
     }
 }

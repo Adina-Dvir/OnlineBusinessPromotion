@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Nest;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -39,12 +40,19 @@ namespace OnlineBusinessPromotion.Controllers
 
         // POST api/<LoginController>
         [HttpPost]
-        public async Task Post([FromBody] UserDto user)
+        public async Task<IActionResult>  Post([FromBody] UserDto user)
         {
-            await service.AddItem(user);
+            if (user != null)
+            {
+                await service.AddItem(user);
+                var token = Generate(user);
+                return Ok(new { token, user = new { user.UserName, user.UserEmail, user.UserPassword } });
+            }
+            return BadRequest(new { message = "User not found or password is incorrect" });
+
         }
         // POST api/<LoginController>
-       
+
         // [HttpPost("login")]
         //public async Task<string> Login([FromBody] UserLogin ul)
         //{

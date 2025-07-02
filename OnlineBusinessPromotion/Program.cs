@@ -102,6 +102,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthentication();
+Console.WriteLine("JWT KEY => " + builder.Configuration["Jwt:Key"]);
+
 app.UseAuthorization();
 
 app.MapControllers();

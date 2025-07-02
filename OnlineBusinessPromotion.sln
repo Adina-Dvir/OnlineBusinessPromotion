@@ -3,15 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineBusinessPromotion", "OnlineBusinessPromotion\OnlineBusinessPromotion.csproj", "{56CDE846-D5C7-4C1A-938D-96874088E49E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineBusinessPromotion", "OnlineBusinessPromotion\OnlineBusinessPromotion.csproj", "{56CDE846-D5C7-4C1A-938D-96874088E49E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{71D4D82C-00B7-4A4D-877F-482742F38E6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{71D4D82C-00B7-4A4D-877F-482742F38E6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "Service\Service.csproj", "{CB8DED92-DCAD-4B00-BC5E-9DCECBB6830D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{CB8DED92-DCAD-4B00-BC5E-9DCECBB6830D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mock", "Mock\Mock.csproj", "{02EF0A69-58F8-45B4-8F65-3BD518B00FB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mock", "Mock\Mock.csproj", "{02EF0A69-58F8-45B4-8F65-3BD518B00FB7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{275B79DA-CA08-442D-92C1-61251B38E321}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{275B79DA-CA08-442D-92C1-61251B38E321}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineBusinessPromotion.test", "OnlineBusinessPromotion.test\OnlineBusinessPromotion.test.csproj", "{757B28D7-A4BC-4AA2-9252-8FA9C816B143}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Interface", "Repository.Interface\Repository.Interface.csproj", "{C77E796C-360F-4B74-8ACA-21F8019E1548}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository.Entities", "Repository.Entities\Repository.Entities.csproj", "{C8983687-6F84-44AE-BDF8-89AEF2864387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +45,18 @@ Global
 		{275B79DA-CA08-442D-92C1-61251B38E321}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{275B79DA-CA08-442D-92C1-61251B38E321}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{275B79DA-CA08-442D-92C1-61251B38E321}.Release|Any CPU.Build.0 = Release|Any CPU
+		{757B28D7-A4BC-4AA2-9252-8FA9C816B143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{757B28D7-A4BC-4AA2-9252-8FA9C816B143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{757B28D7-A4BC-4AA2-9252-8FA9C816B143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{757B28D7-A4BC-4AA2-9252-8FA9C816B143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C77E796C-360F-4B74-8ACA-21F8019E1548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C77E796C-360F-4B74-8ACA-21F8019E1548}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C77E796C-360F-4B74-8ACA-21F8019E1548}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C77E796C-360F-4B74-8ACA-21F8019E1548}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8983687-6F84-44AE-BDF8-89AEF2864387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8983687-6F84-44AE-BDF8-89AEF2864387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8983687-6F84-44AE-BDF8-89AEF2864387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8983687-6F84-44AE-BDF8-89AEF2864387}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

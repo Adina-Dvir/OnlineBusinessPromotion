@@ -20,6 +20,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Mock\Mock.csproj" />
+    <ProjectReference Include="..\Repository.Entities\Repository.Entities.csproj" />
+    <ProjectReference Include="..\Repository.Interface\Repository.Interface.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
     <ProjectReference Include="..\Service\Service.csproj" />
   </ItemGroup>
