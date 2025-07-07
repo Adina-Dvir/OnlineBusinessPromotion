@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using Repository.Entities;
 using Repository.Interfaces;
 using System;
@@ -16,42 +17,12 @@ namespace Repository.Repositories
         {
             _context = context;
         }
-
-        public async Task<ProfessionalClick> GetById(int id)
+        public async Task AddClickAsync(ProfessionalClick click)
         {
-            return await _context.ProfessionalClick.FindAsync(id);
-        }
-
-        public async Task<IEnumerable<ProfessionalClick>> GetAll()
-        {
-            return await _context.ProfessionalClick.ToListAsync();
-        }
-
-        public async Task AddItem(ProfessionalClick entity)
-        {
-            await _context.ProfessionalClick.AddAsync(entity);
+            _context.ProfessionalClick.Add(click);
             await _context.Save();
         }
 
-        public async Task UpdateItem(int id, ProfessionalClick entity)
-        {
-            var existing = await _context.ProfessionalClick.FindAsync(id);
-            if (existing != null)
-            {
-                _context.Entry(existing).CurrentValues.SetValues(entity);
-                await _context.Save();
-            }
-        }
-
-        public async Task DeleteItem(int id)
-        {
-            var item = await _context.ProfessionalClick.FindAsync(id);
-            if (item != null)
-            {
-                _context.ProfessionalClick.Remove(item);
-                await _context.Save();
-            }
-        }
 
         public async Task<List<ProfessionalClick>> GetClicksInRangeAsync(DateTime start, DateTime end)
         {
@@ -60,9 +31,62 @@ namespace Repository.Repositories
                 .ToListAsync();
         }
 
+        public async Task<Dictionary<int, int>> GetClickCountsByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _context.ProfessionalClick
+                .Where(click => click.ClickedAt >= startDate && click.ClickedAt <= endDate)
+                .GroupBy(click => click.ProfessionalId)
+                .Select(group => new
+                {
+                    ProfessionalId = group.Key,
+                    ClickCount = group.Count()
+                })
+                .ToDictionaryAsync(g => g.ProfessionalId, g => g.ClickCount);
+        }
+
+        public async Task<Dictionary<int, int>> GetClicksForWeekAsync(int weekOffset)
+        {
+            var today = DateTime.Today;
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek); // ראשון בבוקר
+            var targetWeekStart = startOfWeek.AddDays(-7 * weekOffset);
+            var targetWeekEnd = targetWeekStart.AddDays(7);
+
+            return await _context.ProfessionalClick
+                .Where(click => click.ClickedAt >= targetWeekStart && click.ClickedAt < targetWeekEnd)
+                .GroupBy(click => click.ProfessionalId)
+                .Select(group => new
+                {
+                    ProfessionalId = group.Key,
+                    ClickCount = group.Count()
+                })
+                .ToDictionaryAsync(g => g.ProfessionalId, g => g.ClickCount);
+        }
+
         public List<ProfessionalClick> GetClicksForWeek(int weekOffset)
         {
-            throw new NotImplementedException();
+            var today = DateTime.Today;
+            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
+            var targetWeekStart = startOfWeek.AddDays(-7 * weekOffset);
+            var targetWeekEnd = targetWeekStart.AddDays(7);
+
+            return _context.ProfessionalClick
+                .Where(click => click.ClickedAt >= targetWeekStart && click.ClickedAt < targetWeekEnd)
+                .ToList();
         }
+
+        public async Task<Dictionary<int, int>> GetClicksByBusinessAsync(DateTime from, DateTime to)
+        {
+            return await _context.ProfessionalClick
+                .Where(click => click.ClickedAt >= from && click.ClickedAt <= to)
+                .GroupBy(click => click.ProfessionalId)
+                .Select(group => new
+                {
+                    ProfessionalId = group.Key,
+                    ClickCount = group.Count()
+                })
+                .ToDictionaryAsync(g => g.ProfessionalId, g => g.ClickCount);
+        }
+
     }
 }
+

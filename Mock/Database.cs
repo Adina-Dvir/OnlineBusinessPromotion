@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Repository.Entities;
 using Repository.Interfaces;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Repository.Entities.Entities;
 
 
 namespace Mock
@@ -19,6 +20,7 @@ namespace Mock
         public DbSet<EmailDetails> EmailDetails { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<ProfessionalClick> ProfessionalClick { get; set; }
+        public DbSet<ProfessionalImages> ProfessionalImages { get; set; }
 
         public async Task Save()
         {

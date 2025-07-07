@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Repository.Entities;
+using Repository.Entities.Entities;
 using Repository.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Repository.Repositories
     {
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
+            services.AddScoped<IRepository<ProfessionalImages>,ProfessionalImagesRepository>();
+
             services.AddScoped<IRepository<Professionals>,ProfessionalsRepository>();
             services.AddScoped<IRepository<Category>, CategoryRepositotry>();
             services.AddScoped<IRepository<User>, UserRepository>();

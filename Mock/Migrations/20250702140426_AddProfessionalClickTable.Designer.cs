@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Mock;
 
@@ -11,9 +12,11 @@ using Mock;
 namespace Mock.Migrations
 {
     [DbContext(typeof(Database))]
-    partial class DatabaseModelSnapshot : ModelSnapshot
+    [Migration("20250702140426_AddProfessionalClickTable")]
+    partial class AddProfessionalClickTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,32 +104,6 @@ namespace Mock.Migrations
                     b.HasKey("EmailId");
 
                     b.ToTable("EmailDetails");
-                });
-
-            modelBuilder.Entity("Repository.Entities.Entities.ProfessionalImages", b =>
-                {
-                    b.Property<int>("ImageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"));
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("ImageData")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<int>("ProfessionalId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ImageId");
-
-                    b.HasIndex("ProfessionalId");
-
-                    b.ToTable("ProfessionalImages");
                 });
 
             modelBuilder.Entity("Repository.Entities.ProfessionalClick", b =>
@@ -246,17 +223,6 @@ namespace Mock.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Repository.Entities.Entities.ProfessionalImages", b =>
-                {
-                    b.HasOne("Repository.Entities.Professionals", "Professional")
-                        .WithMany("Images")
-                        .HasForeignKey("ProfessionalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Professional");
-                });
-
             modelBuilder.Entity("Repository.Entities.ProfessionalClick", b =>
                 {
                     b.HasOne("Repository.Entities.Professionals", "professional")
@@ -282,11 +248,6 @@ namespace Mock.Migrations
             modelBuilder.Entity("Repository.Entities.Category", b =>
                 {
                     b.Navigation("Professionals");
-                });
-
-            modelBuilder.Entity("Repository.Entities.Professionals", b =>
-                {
-                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

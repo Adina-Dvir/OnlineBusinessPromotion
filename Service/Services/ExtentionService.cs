@@ -16,10 +16,10 @@ namespace Service.Services
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IService<ProfessionalsDto>, ProfessionalService>();
             services.AddScoped<IService<UserDto>, UserService>();
             services.AddScoped<IService<CategoryDto>, CategoryService>();
             services.AddScoped<IService<CommentDto>, CommentService>();
+            services.AddScoped<IProfessionalService, ProfessionalService>();
             services.AddAutoMapper(typeof(MyMapper));
             return services;
         }

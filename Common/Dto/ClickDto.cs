@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Service.Services
+namespace Common.Dto
 {
-    public class RankingService
+    public class ClickDto
     {
+        public int ProfessionalId { get; set; }
+
     }
+
 }

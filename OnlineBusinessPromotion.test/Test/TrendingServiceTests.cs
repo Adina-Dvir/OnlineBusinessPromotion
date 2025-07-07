@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Service.Services;
 using Xunit;
+using Moq;
+using Service.Services;
+using Repository.Interfaces;
+using Repository.Entities;
 
 namespace BusinessPromotion.Test
 {
@@ -14,12 +14,14 @@ namespace BusinessPromotion.Test
         public void CalculateTrendingBusinesses_ReturnsCorrectResults()
         {
             // Arrange
-            var service = new TrendingService();
+            var mockClickRepo = new Mock<IClickRepository>();
+            var mockProfessionalsRepo = new Mock<IRepository<Professionals>>();
+            var service = new TrendingService(mockClickRepo.Object, mockProfessionalsRepo.Object);
 
             var current = new Dictionary<int, int> {
-                { 1, 150 }, // עלייה של 66%
-                { 2, 80 },  // עלייה קטנה
-                { 3, 10 }   // ירידה
+                { 1, 150 },
+                { 2, 80 },
+                { 3, 10 }
             };
 
             var previous = new Dictionary<int, int> {
@@ -29,43 +31,42 @@ namespace BusinessPromotion.Test
             };
 
             // Act
-            var trending = service.CalculateTrendingBusinesses(current, previous);
+            var trending = service.RankTrendingBusinesses(current, previous);
 
             // Assert
-            Assert.Contains(1, trending); // ✔
-            Assert.DoesNotContain(2, trending); // ✘
-            Assert.DoesNotContain(3, trending); // ✘
+            Assert.Contains(1, trending);
+            Assert.DoesNotContain(2, trending);
+            Assert.DoesNotContain(3, trending);
         }
-            [Fact]
-            public void RankTrendingBusinesses_ShouldReturnBusinessesRankedByTrend()
-            {
-                // Arrange – הכנה של נתוני בדיקה
-                var service = new TrendingService();
 
-                var previousWeek = new Dictionary<int, int>
+        [Fact]
+        public void RankTrendingBusinesses_ShouldReturnBusinessesRankedByTrend()
+        {
+            // Arrange
+            var mockClickRepo = new Mock<IClickRepository>();
+            var mockProfessionalsRepo = new Mock<IRepository<Professionals>>();
+            var service = new TrendingService(mockClickRepo.Object, mockProfessionalsRepo.Object);
+
+            var previousWeek = new Dictionary<int, int>
             {
                 { 1, 100 },
                 { 2, 50 },
                 { 3, 30 }
             };
 
-                var currentWeek = new Dictionary<int, int>
+            var currentWeek = new Dictionary<int, int>
             {
-                { 1, 180 }, // ↑ 80%
-                { 2, 70 },  // ↑ 40%
-                { 3, 75 }   // ↑ 150%
+                { 1, 180 },
+                { 2, 70 },
+                { 3, 75 }
             };
 
-                // Act – הרצת הפונקציה הנבדקת
-                var result = service.RankTrendingBusinesses(currentWeek, previousWeek);
+            // Act
+            var result = service.RankTrendingBusinesses(currentWeek, previousWeek);
 
-                // Assert – בדיקת התוצאה
-                var expected = new List<int> { 3, 1 }; // רק ID 3 ו־1 עלו ב־50% לפחות
-
-                Assert.Equal(expected, result);
-            }
+            // Assert
+            var expected = new List<int> { 3, 1 };
+            Assert.Equal(expected, result);
         }
     }
-
-
-
+}

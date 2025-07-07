@@ -8,6 +8,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Mock;
+using Service.Logic;
+using Nest;
+using Repository.Entities.Entities;
+using Service.Services;  // או המקום שבו מוגדרת המחלקה שלך
+using Service.Mapping;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,8 +56,13 @@ builder.Services.AddSwaggerGen(option =>
 // ---------- Services & DI ----------
 builder.Services.AddScoped<IContext, Database>();
 builder.Services.AddDbContext<IContext, Database>();
+builder.Services.AddScoped<IClickRepository, ClickRepository>();
 builder.Services.AddRepository();
 builder.Services.AddServices();
+builder.Services.AddScoped<TrendingService>();
+builder.Services.AddScoped<RankingService>();
+builder.Services.AddScoped<ClickSeeder>();
+builder.Services.AddScoped<BusinessRankingExecutor>();
 builder.Services.AddControllers();
 
 // ---------- CORS ----------
@@ -84,10 +95,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// ✅ זה המקום הנכון לרשום Authorization
+// ✅ הוספת AutoMapper כאן, לפני Build
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
+// ✅ Authorization
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+//----- הוספת הקריאה לסידר:
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<ClickSeeder>();
+    await seeder.SeedClicksAsync();
+}
 
 // ---------- Middleware Pipeline ----------
 if (app.Environment.IsDevelopment())
@@ -102,9 +123,11 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthentication();
+
 Console.WriteLine("JWT KEY => " + builder.Configuration["Jwt:Key"]);
 
 app.UseAuthorization();
 
 app.MapControllers();
+
 app.Run();

@@ -20,10 +20,11 @@ namespace Service.Services
 
             // 🟡 מיפוי של Professionals ➡️ ProfessionalsDto
             // מקריא את קובץ התמונה לדאטה של בייטים (ArrImage)
-            CreateMap<Professionals, ProfessionalsDto>().ForMember("ArrImage", x => x.MapFrom(y => File.ReadAllBytes(path + y.ImageUrls)));
+            //CreateMap<Professionals, ProfessionalsDto>().ForMember("ArrImage", x => x.MapFrom(y => File.ReadAllBytes(path + y.ImageUrls)));
             // 🟢 מיפוי של ProfessionalsDto ➡️ Professionals
             // שומר רק את שם הקובץ (FileName) לתוך ImageUrls
-            CreateMap<ProfessionalsDto, Professionals>().ForMember("ImageUrls", x => x.MapFrom(y => y.fileImage.FileName));
+            CreateMap<ProfessionalFormDto, Professionals>()
+                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.fileImage != null ? src.fileImage.FileName : null));
             // ✅ מיפוי של User ➡️ UserDto (מיפוי פשוט, אין בו תמונה כרגע)
             CreateMap<User, UserDto>().ReverseMap();
 

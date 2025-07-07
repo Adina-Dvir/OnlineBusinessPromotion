@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Repository.Entities.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,6 +27,8 @@ namespace Repository.Entities
         public string ProfessionalPlace { get; set; }
         public string Profile { get; set; }
         public string City { get; set; }
+        public ICollection<ProfessionalImages> Images { get; set; } = new List<ProfessionalImages>();
+
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category category { get; set; }

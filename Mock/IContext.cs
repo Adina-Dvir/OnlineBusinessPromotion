@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Repository.Entities;
+using Repository.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace Repository.Interfaces
         public DbSet<EmailDetails> EmailDetails { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<ProfessionalClick> ProfessionalClick { get; set; }
+        public DbSet<ProfessionalImages> ProfessionalImages { get; set; }
+
 
         public Task Save();
         EntityEntry Entry(object entity);

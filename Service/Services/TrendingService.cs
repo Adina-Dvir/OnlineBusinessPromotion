@@ -1,80 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Service.Services; // אם TrendingService מוגדר שם
-
+using Repository.Entities;
+using Repository.Interfaces;
+using Common.Dto;
+using Repository.Repositories;
 
 namespace Service.Services
 {
     public class TrendingService
     {
-        public List<int> CalculateTrendingBusinesses(
-            Dictionary<int, int> currentWeek,
-            Dictionary<int, int> previousWeek)
+
+        private readonly IClickRepository _clickRepo;
+        private readonly IRepository<Professionals> _professionalRepo;
+
+        public TrendingService(IClickRepository clickRepo, IRepository<Professionals> professionalRepo)
         {
-            var trending = new List<int>();
-
-            foreach (var kvp in currentWeek)
-            {
-                var businessId = kvp.Key;
-                var currentClicks = kvp.Value;
-
-                previousWeek.TryGetValue(businessId, out int prevClicks);
-
-                if (prevClicks == 0)
-                    continue;
-
-                double percentIncrease = ((double)(currentClicks - prevClicks) / prevClicks) * 100;
-
-                if (percentIncrease >= 50)
-                    trending.Add(businessId);
-            }
-
-            return trending;
+            _clickRepo = clickRepo;
+            _professionalRepo = professionalRepo;
         }
 
+        public async Task<Dictionary<int, int>> GetClicksForWeekAsync(int weekOffset)
+        {
+            var today = DateTime.Today;
+            var currentDayOfWeek = (int)today.DayOfWeek; // 0=Sunday, 6=Saturday
+            var startOfWeek = today.AddDays(-currentDayOfWeek - 7 * weekOffset); // ראשון לפני X שבועות
+            var endOfWeek = startOfWeek.AddDays(7); // עד שבת
 
-        /// <summary>
-        /// מדורג את העסקים לפי אחוז העלייה בכמות הקליקים לעומת השבוע הקודם.
-        /// רק עסקים עם עלייה של לפחות 50% נחשבים טרנדיים.
-        /// </summary>
-        /// <param name="currentWeek">מילון: BusinessID -> קליקים שבוע נוכחי</param>
-        /// <param name="previousWeek">מילון: BusinessID -> קליקים שבוע קודם</param>
-        /// <returns>רשימה מדורגת של BusinessIDs לפי אחוז עלייה, מהגבוה לנמוך</returns>
+            return await _clickRepo.GetClicksByBusinessAsync(startOfWeek, endOfWeek);
+        }
+
 
         public List<int> RankTrendingBusinesses(
             Dictionary<int, int> currentWeek,
             Dictionary<int, int> previousWeek)
         {
-            var trendingGrowth = new List<(int businessId, double growth)>();
+            return currentWeek
+                .Where(kvp => previousWeek.ContainsKey(kvp.Key) && previousWeek[kvp.Key] > 0)
+                .Select(kvp => new
+                {
+                    BusinessId = kvp.Key,
+                    Growth = ((double)(kvp.Value - previousWeek[kvp.Key]) / previousWeek[kvp.Key]) * 100
+                })
+                .Where(x => x.Growth >= 50)
+                .OrderByDescending(x => x.Growth)
+                .Select(x => x.BusinessId)
+                 .Take(5)    // <-- מגבלת 5 עסקים
 
-            foreach (var kvp in currentWeek)
-            {
-                var businessId = kvp.Key;
-                var currentClicks = kvp.Value;
-
-                previousWeek.TryGetValue(businessId, out int prevClicks);
-
-                if (prevClicks == 0)
-                    continue; // אי אפשר לחשב צמיחה אם לא היו קליקים בכלל קודם
-
-                double growth = ((double)(currentClicks - prevClicks) / prevClicks) * 100;
-
-                if (growth >= 50) // נחשב רק אם טרנדי
-                    trendingGrowth.Add((businessId, growth));
-            }
-
-            // מיון מהכי טרנדי לפחות
-            var sorted = trendingGrowth
-                .OrderByDescending(b => b.growth)
-                .Select(b => b.businessId)
                 .ToList();
-
-            return sorted;
         }
+
+        public async Task<List<ProfessionalsDto>> GetBusinessesByIdsAsync(List<int> ids)
+        {
+            var allProfessionals = await _professionalRepo.GetAll();
+
+            return allProfessionals
+                .Where(p => ids.Contains(p.ProfessionalId))
+                .Select(p => new ProfessionalsDto
+                {
+                    ProfessionalId = p.ProfessionalId,
+                    ProfessionalName = p.ProfessionalName,
+                    ProfessionalEmail = p.ProfessionalEmail,
+                    CategoryId = p.CategoryId,
+                    ProfessionalDescription = p.ProfessionalDescription
+                })
+                .ToList();
+        }
+
 
     }
 }
+
 

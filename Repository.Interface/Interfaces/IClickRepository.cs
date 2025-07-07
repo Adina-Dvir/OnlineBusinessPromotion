@@ -7,12 +7,12 @@ namespace Repository.Interfaces
 {
     public interface IClickRepository
     {
-        Task<ProfessionalClick> GetById(int id);
-        Task<IEnumerable<ProfessionalClick>> GetAll();
-        Task AddItem(ProfessionalClick entity);
-        Task UpdateItem(int id, ProfessionalClick entity);
-        Task DeleteItem(int id);
+
         Task<List<ProfessionalClick>> GetClicksInRangeAsync(DateTime start, DateTime end);
+        Task<Dictionary<int, int>> GetClickCountsByDateRangeAsync(DateTime startDate, DateTime endDate);
         List<ProfessionalClick> GetClicksForWeek(int weekOffset);
+        Task<Dictionary<int, int>> GetClicksByBusinessAsync(DateTime from, DateTime to);
+        Task AddClickAsync(ProfessionalClick click);
+
     }
 }
