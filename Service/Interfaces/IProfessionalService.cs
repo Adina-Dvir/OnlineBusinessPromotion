@@ -12,5 +12,6 @@ namespace Service.Interfaces
         Task<ProfessionalsDto> AddItem(ProfessionalFormDto item);
         Task UpdateItem(int id, ProfessionalFormDto item);
         Task DeleteItem(int id);
+        Task<List<ProfessionalsDto>> GetProfessionalsByCategory(int categoryId);
     }
 }

@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Common.Dto;
+using Microsoft.EntityFrameworkCore.Storage;
 using Repository.Entities;
 using Repository.Entities.Entities;
 using Repository.Interfaces;
 using Service.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Service.Services
 {
@@ -14,15 +17,16 @@ namespace Service.Services
         private readonly IRepository<Professionals> _professionalsRepository;
         private readonly IRepository<ProfessionalImages> _imagesRepository;
         private readonly IMapper _mapper;
-
+        private readonly IContext _context;
         public ProfessionalService(
             IRepository<Professionals> professionalsRepository,
             IRepository<ProfessionalImages> imagesRepository,
-            IMapper mapper)
+            IMapper mapper, IContext context)
         {
             _professionalsRepository = professionalsRepository;
             _imagesRepository = imagesRepository;
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<ProfessionalsDto> AddItem(ProfessionalFormDto item)
@@ -80,5 +84,16 @@ namespace Service.Services
             var entity = _mapper.Map<Professionals>(item);
             await _professionalsRepository.UpdateItem(id, entity);
         }
+        public async Task<List<ProfessionalsDto>> GetProfessionalsByCategory(int categoryId)
+        {
+            var professionals = await _context.Professionals
+                .Where(p => p.CategoryId == categoryId)
+                .ToListAsync();
+
+            return _mapper.Map<List<ProfessionalsDto>>(professionals);
+        }
+
+
+
     }
 }

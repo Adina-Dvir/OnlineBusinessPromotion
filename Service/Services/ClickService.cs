@@ -31,5 +31,10 @@ namespace Service.Services
             var startOfLastWeek = startOfCurrentWeek.AddDays(-7);
             return await _clickRepository.GetClicksByBusinessAsync(startOfLastWeek, startOfCurrentWeek);
         }
+        public async Task<Dictionary<int, List<int>>> GetClicksPerDayForBusinessesAsync(DateTime from, DateTime to)
+        {
+            return await _clickRepository.GetClicksPerDayForBusinessesAsync(from, to);
+        }
+
     }
 }

@@ -40,6 +40,17 @@ namespace OnlineBusinessPromotion.Controllers
             var createdProfessional = await service.AddItem(professionalForm);
             return createdProfessional;
         }
+        [HttpGet("byCategory/{categoryId}")]
+        public async Task<ActionResult<List<ProfessionalsDto>>> GetByCategory(int categoryId)
+        {
+            var professionals = await service.GetProfessionalsByCategory(categoryId);
+
+            if (professionals == null || professionals.Count == 0)
+                return NotFound("לא נמצאו עסקים לקטגוריה זו");
+
+            return Ok(professionals);
+        }
+
 
         [HttpPut("{id}")]
         [Authorize]

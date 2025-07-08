@@ -66,6 +66,56 @@ namespace Service.Services
                 })
                 .ToList();
         }
+        public async Task<List<int>> DetectSuddenDailySpikesAsync()
+        {
+            var today = DateTime.Today;
+            var from = today.AddDays(-7);
+
+            var clicksPerDay = await _clickRepo.GetClicksPerDayForBusinessesAsync(from, today);
+            var trending = new List<int>();
+
+            foreach (var kvp in clicksPerDay)
+            {
+                var businessId = kvp.Key;
+                var dailyClicks = kvp.Value;
+
+                for (int i = 1; i < dailyClicks.Count; i++)
+                {
+                    var prev = dailyClicks[i - 1];
+                    var curr = dailyClicks[i];
+
+                    if (prev == 0) continue;
+
+                    double growth = ((double)(curr - prev) / prev) * 100;
+                    if (growth >= 200)
+                    {
+                        trending.Add(businessId);
+                        break;
+                    }
+                }
+            }
+
+            return trending.Distinct().ToList();
+        }
+
+        public async Task<List<int>> GetTopTrendingBusinessIdsAsync(Dictionary<int, int> currentWeek, Dictionary<int, int> previousWeek)
+        {
+            var weeklyTrending = RankTrendingBusinesses(currentWeek, previousWeek);
+            var dailyTrending = await DetectSuddenDailySpikesAsync();
+
+            // עסקים חדשים בלי שבוע קודם – נחשב אותם גם
+            var newBusinesses = currentWeek
+                .Where(kvp => !previousWeek.ContainsKey(kvp.Key) && kvp.Value > 0)
+                .Select(kvp => kvp.Key);
+
+            return weeklyTrending
+                .Union(dailyTrending)
+                .Union(newBusinesses)
+                .Distinct()
+                .Take(5)
+                .ToList();
+        }
+
 
 
     }

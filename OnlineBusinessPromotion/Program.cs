@@ -104,11 +104,11 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 //----- הוספת הקריאה לסידר:
-using (var scope = app.Services.CreateScope())
-{
-    var seeder = scope.ServiceProvider.GetRequiredService<ClickSeeder>();
-    await seeder.SeedClicksAsync();
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var seeder = scope.ServiceProvider.GetRequiredService<ClickSeeder>();
+//    await seeder.SeedClicksAsync();
+//}
 
 // ---------- Middleware Pipeline ----------
 if (app.Environment.IsDevelopment())

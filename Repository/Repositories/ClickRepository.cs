@@ -86,6 +86,40 @@ namespace Repository.Repositories
                 })
                 .ToDictionaryAsync(g => g.ProfessionalId, g => g.ClickCount);
         }
+        public async Task<Dictionary<int, List<int>>> GetClicksPerDayForBusinessesAsync(DateTime from, DateTime to)
+        {
+            var result = await _context.ProfessionalClick
+                .Where(c => c.ClickedAt >= from && c.ClickedAt < to)
+                .GroupBy(c => new { c.ProfessionalId, Day = c.ClickedAt.Date })
+                .Select(g => new
+                {
+                    g.Key.ProfessionalId,
+                    Day = g.Key.Day,
+                    ClickCount = g.Count()
+                })
+                .ToListAsync();
+
+            var groupedByBusiness = result
+                .GroupBy(r => r.ProfessionalId)
+                .ToDictionary(
+                    g => g.Key,
+                    g =>
+                    {
+                        var dailyCounts = new int[(to - from).Days];
+                        foreach (var entry in g)
+                        {
+                            int dayIndex = (entry.Day - from.Date).Days;
+                            if (dayIndex >= 0 && dayIndex < dailyCounts.Length)
+                            {
+                                dailyCounts[dayIndex] = entry.ClickCount;
+                            }
+                        }
+                        return dailyCounts.ToList();
+                    });
+
+            return groupedByBusiness;
+        }
+
 
     }
 }

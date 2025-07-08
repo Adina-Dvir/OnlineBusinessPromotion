@@ -10,5 +10,6 @@ namespace Service.Interfaces
     {
         Task<Dictionary<int, int>> GetClicksForCurrentWeekAsync();
         Task<Dictionary<int, int>> GetClicksForPreviousWeekAsync();
+
     }
 }

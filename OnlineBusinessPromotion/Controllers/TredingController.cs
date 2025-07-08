@@ -22,18 +22,16 @@ public class TrendingController : ControllerBase
     [HttpGet("top5")]
     public async Task<ActionResult<List<ProfessionalsDto>>> GetTopTrendingBusinesses()
     {
-        // שלב 1: הבאת נתוני הקליקים מהשבוע הנוכחי ומהשבוע שעבר
-        var currentWeek = await _trendingService.GetClicksForWeekAsync(0);   // 0 = השבוע
-        var previousWeek = await _trendingService.GetClicksForWeekAsync(1);  // 1 = שבוע קודם
+        var currentWeek = await _trendingService.GetClicksForWeekAsync(0);
+        var previousWeek = await _trendingService.GetClicksForWeekAsync(1);
 
-        // שלב 2: דירוג לפי טרנדיות
-        var topBusinessIds = _trendingService.RankTrendingBusinesses(currentWeek, previousWeek);
+        // קבלת כל העסקים הטרנדיים - כולל קפיצה חדה יומית
+        var topIds = await _trendingService.GetTopTrendingBusinessIdsAsync(currentWeek, previousWeek);
 
-        // שלב 3: שליפה מה-DB והמרה ל-DTO
-        var result = await _trendingService.GetBusinessesByIdsAsync(topBusinessIds);
-
-        return Ok(result);
+        var businesses = await _trendingService.GetBusinessesByIdsAsync(topIds);
+        return Ok(businesses);
     }
+
 
 
     [HttpPost]
