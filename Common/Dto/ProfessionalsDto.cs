@@ -20,6 +20,7 @@ using System.ComponentModel.DataAnnotations.Schema;
     public string? Profile { get; set; }
     public string? City { get; set; }
     public int? CategoryId { get; set; }
+    public int TotalClicks { get; set; } // ⬅️ הוסיפי את זה
 
     // זה יוצג לצד לקוח
     public List<ProfessionalImageDto>? Images { get; set; }

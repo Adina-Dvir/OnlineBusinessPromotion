@@ -39,10 +39,17 @@ namespace Service.Services
         }
 
         // הוספת יוזר חדש למערכת
-        public async Task<UserDto> AddItem(UserDto item)
+        public async Task<UserDto> AddItem(UserDto user)
         {
+            if (!Validation.IsValidName(user.UserName))
+                throw new ArgumentException("שם לא תקין");
+
+
+            if (!Validation.IsValidEmail(user.UserEmail))
+                throw new ArgumentException("אימייל לא תקין");
+
             // ממפה את ה-DTO לאובייקט יוזר מסוג Entity
-            User u =await repository.AddItem(mapper.Map<UserDto, User>(item));
+            User u =await repository.AddItem(mapper.Map<UserDto, User>(user));
 
             // מחזיר את היוזר החדש אחרי השמירה, במבנה DTO
             return mapper.Map<User, UserDto>(u);
@@ -67,9 +74,15 @@ namespace Service.Services
         }
 
         // עדכון פרטי יוזר לפי מזהה
-        public async Task UpdateItem(int id, UserDto item)
+        public async Task UpdateItem(int id, UserDto user)
         {
-            await repository.UpdateItem(id, mapper.Map<UserDto, User>(item));
+            if (!Validation.IsValidName(user.UserName))
+                throw new ArgumentException("שם לא תקין");
+
+
+            if (!Validation.IsValidEmail(user.UserEmail))
+                throw new ArgumentException("אימייל לא תקין");
+            await repository.UpdateItem(id, mapper.Map<UserDto, User>(user));
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Repository.Interfaces
         Task<Dictionary<int, int>> GetClicksByBusinessAsync(DateTime from, DateTime to);
         Task AddClickAsync(ProfessionalClick click);
         Task<Dictionary<int, List<int>>> GetClicksPerDayForBusinessesAsync(DateTime from, DateTime to);
-
+        Task<int> GetClicksForProfessionalAsync(int professionalId);
 
     }
 }

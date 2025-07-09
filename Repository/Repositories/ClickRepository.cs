@@ -88,6 +88,9 @@ namespace Repository.Repositories
         }
         public async Task<Dictionary<int, List<int>>> GetClicksPerDayForBusinessesAsync(DateTime from, DateTime to)
         {
+            int totalDays = (to.Date - from.Date).Days;
+
+            // שלב 1: שליפת הקליקים
             var result = await _context.ProfessionalClick
                 .Where(c => c.ClickedAt >= from && c.ClickedAt < to)
                 .GroupBy(c => new { c.ProfessionalId, Day = c.ClickedAt.Date })
@@ -99,27 +102,36 @@ namespace Repository.Repositories
                 })
                 .ToListAsync();
 
-            var groupedByBusiness = result
-                .GroupBy(r => r.ProfessionalId)
-                .ToDictionary(
-                    g => g.Key,
-                    g =>
+            // שלב 2: רשימה של כל העסקים שהופיעו בטווח
+            var allBusinessIds = result.Select(r => r.ProfessionalId).Distinct();
+
+            // שלב 3: קיבוץ לפי עסק והשלמת ערכים חסרים
+            var groupedByBusiness = allBusinessIds.ToDictionary(
+                businessId => businessId,
+                businessId =>
+                {
+                    var dailyCounts = new int[totalDays];
+                    var businessEntries = result.Where(r => r.ProfessionalId == businessId);
+                    foreach (var entry in businessEntries)
                     {
-                        var dailyCounts = new int[(to - from).Days];
-                        foreach (var entry in g)
+                        int dayIndex = (entry.Day - from.Date).Days;
+                        if (dayIndex >= 0 && dayIndex < totalDays)
                         {
-                            int dayIndex = (entry.Day - from.Date).Days;
-                            if (dayIndex >= 0 && dayIndex < dailyCounts.Length)
-                            {
-                                dailyCounts[dayIndex] = entry.ClickCount;
-                            }
+                            dailyCounts[dayIndex] = entry.ClickCount;
                         }
-                        return dailyCounts.ToList();
-                    });
+                    }
+                    return dailyCounts.ToList();
+                });
 
             return groupedByBusiness;
         }
 
+
+        public async Task<int> GetClicksForProfessionalAsync(int professionalId)
+        {
+            return await _context.ProfessionalClick
+                .CountAsync(c => c.ProfessionalId == professionalId);
+        }
 
     }
 }

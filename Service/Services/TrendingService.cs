@@ -49,23 +49,34 @@ namespace Service.Services
 
                 .ToList();
         }
-
         public async Task<List<ProfessionalsDto>> GetBusinessesByIdsAsync(List<int> ids)
         {
             var allProfessionals = await _professionalRepo.GetAll();
 
-            return allProfessionals
+            var selected = allProfessionals
                 .Where(p => ids.Contains(p.ProfessionalId))
-                .Select(p => new ProfessionalsDto
+                .ToList();
+
+            var result = new List<ProfessionalsDto>();
+
+            foreach (var p in selected)
+            {
+                var totalClicks = await _clickRepo.GetClicksForProfessionalAsync(p.ProfessionalId);
+
+                result.Add(new ProfessionalsDto
                 {
                     ProfessionalId = p.ProfessionalId,
                     ProfessionalName = p.ProfessionalName,
                     ProfessionalEmail = p.ProfessionalEmail,
                     CategoryId = p.CategoryId,
-                    ProfessionalDescription = p.ProfessionalDescription
-                })
-                .ToList();
+                    ProfessionalDescription = p.ProfessionalDescription,
+                    TotalClicks = totalClicks
+                });
+            }
+
+            return result;
         }
+
         public async Task<List<int>> DetectSuddenDailySpikesAsync()
         {
             var today = DateTime.Today;
@@ -87,7 +98,7 @@ namespace Service.Services
                     if (prev == 0) continue;
 
                     double growth = ((double)(curr - prev) / prev) * 100;
-                    if (growth >= 200)
+                    if (growth >= 100)
                     {
                         trending.Add(businessId);
                         break;
@@ -116,6 +127,8 @@ namespace Service.Services
                 .ToList();
         }
 
+        
+        
 
 
     }

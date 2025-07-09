@@ -8,13 +8,11 @@ namespace Common.Dto
 {
     public class ProfessionalImageDto
     {
-        public int ImageId { get; set; }  // אפשרי להשאיר לא חייב בשלב ההוספה
-
+        public int ImageId { get; set; }
+        public string FileName { get; set; }
+        public string ImageBase64 { get; set; }
         public int ProfessionalId { get; set; }
-
-        public string FileName { get; set; } = string.Empty;
-
-        public byte[] ImageData { get; set; } = Array.Empty<byte>();
     }
+
 }
 

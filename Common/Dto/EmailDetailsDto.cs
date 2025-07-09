@@ -5,16 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Dto    
-{
-    public class EmailDetailsDto
+
+    namespace Common.Dto
     {
-        [Key]
-        public int EmailId { get; set; }
-        public string Mambers { get; set; }//?
-        public string Recipient { get; set; }//?
-        public string MsgBody { get; set; }//גוף ההודעה
-        public string Subject { get; set; }//נושא
-        public string Attachment { get; set; }//?
+        public class EmailDetailsDto
+        {
+            public string Recipient { get; set; } = ""; // כתובת המייל של העסק
+            public string Subject { get; set; } = "";   // נושא
+            public string MsgBody { get; set; } = "";   // גוף ההודעה
+        }
     }
-}
+
+

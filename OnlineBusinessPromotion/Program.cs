@@ -21,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var secretKey = jwtSettings["Key"];
 var issuer = jwtSettings["Issuer"];
-var audience = jwtSettings["Audience"];
+
 
 // ---------- Swagger ----------
 builder.Services.AddEndpointsApiExplorer();
@@ -116,7 +116,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+var audience = jwtSettings["Audience"];
+app.Use(async (context, next) =>
+{
+    Console.WriteLine("Authorization Header: " + context.Request.Headers["Authorization"]);
+    await next.Invoke();
+});
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();

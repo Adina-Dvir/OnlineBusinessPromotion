@@ -29,38 +29,6 @@ namespace Service.Services
             _context = context;
         }
 
-        public async Task<ProfessionalsDto> AddItem(ProfessionalFormDto item)
-        {
-            var entity = _mapper.Map<Professionals>(item);
-
-            // שמירת התמונות בתוך ImageData
-            if (item.fileImages != null && item.fileImages.Any())
-            {
-                foreach (var formFile in item.fileImages)
-                {
-                    if (formFile.Length > 0)
-                    {
-                        using (var ms = new MemoryStream())
-                        {
-                            await formFile.CopyToAsync(ms);
-
-                            var image = new ProfessionalImages
-                            {
-                                ImageData = ms.ToArray(),
-                                FileName = formFile.FileName,
-                                Professional = entity
-                            };
-
-                            entity.Images.Add(image);
-                        }
-                    }
-                }
-            }
-
-            var added = await _professionalsRepository.AddItem(entity);
-            return _mapper.Map<ProfessionalsDto>(added);
-        }
-
 
         public async Task DeleteItem(int id)
         {
@@ -75,13 +43,60 @@ namespace Service.Services
 
         public async Task<ProfessionalsDto> GetById(int id)
         {
-            var entity = await _professionalsRepository.GetById(id);
-            return _mapper.Map<ProfessionalsDto>(entity);
+            var entity = await _context.Professionals
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.ProfessionalId == id);
+
+            if (entity == null)
+                throw new Exception("לא נמצא");
+
+            var dto = new ProfessionalsDto
+            {
+                ProfessionalId = entity.ProfessionalId,
+                ProfessionalName = entity.ProfessionalName,
+                ProfessionalAdress = entity.ProfessionalAdress,
+                ProfessionalDescription = entity.ProfessionalDescription,
+                PriceRange = entity.PriceRange,
+                ProfessionalPhone = entity.ProfessionalPhone,
+                ProfessionalEmail = entity.ProfessionalEmail,
+                Subject = entity.Subject,
+                Years = entity.Years,
+                ProfessionalPassword = entity.ProfessionalPassword,
+                UploadDate = entity.UploadDate,
+                ProfessionalPlace = entity.ProfessionalPlace,
+                Profile = entity.Profile,
+                City = entity.City,
+                CategoryId = entity.CategoryId,
+                Images = entity.Images?
+                .Where(img => img.ImageData != null && img.ImageData.Length > 0)
+                .Select(img => new ProfessionalImageDto
+                {
+                    ImageId = img.ImageId,
+                    FileName = img.FileName,
+                    ProfessionalId = img.ProfessionalId,
+                    ImageBase64 = $"data:image/jpeg;base64,{Convert.ToBase64String(img.ImageData)}"
+                }).ToList()
+
+            };
+
+            return dto;
         }
 
-        public async Task UpdateItem(int id, ProfessionalFormDto item)
+
+        public async Task UpdateItem(int id, ProfessionalFormDto professional)
         {
-            var entity = _mapper.Map<Professionals>(item);
+            if (!Validation.IsValidName(professional.ProfessionalName))
+                throw new ArgumentException("שם לא תקין");
+
+            if (!Validation.IsValidPhoneNumber(professional.ProfessionalPhone))
+                throw new ArgumentException("מספר טלפון לא תקין");
+
+            if (!Validation.IsValidEmail(professional.ProfessionalEmail))
+                throw new ArgumentException("אימייל לא תקין");
+
+            if (!Validation.IsValidAddress(professional.ProfessionalAdress))
+                throw new ArgumentException("כתובת לא תקינה");
+            var entity = _mapper.Map<Professionals>(professional);
             await _professionalsRepository.UpdateItem(id, entity);
         }
         public async Task<List<ProfessionalsDto>> GetProfessionalsByCategory(int categoryId)
@@ -93,7 +108,48 @@ namespace Service.Services
             return _mapper.Map<List<ProfessionalsDto>>(professionals);
         }
 
+        public async Task<ProfessionalsDto> AddItem(ProfessionalFormDto professional)
+        {
+            if (!Validation.IsValidName(professional.ProfessionalName))
+                    throw new ArgumentException("שם לא תקין");
 
+                if (!Validation.IsValidPhoneNumber(professional.ProfessionalPhone))
+                    throw new ArgumentException("מספר טלפון לא תקין");
 
+                if (!Validation.IsValidEmail(professional.ProfessionalEmail))
+                    throw new ArgumentException("אימייל לא תקין");
+
+                if (!Validation.IsValidAddress(professional.ProfessionalAdress))
+                    throw new ArgumentException("כתובת לא תקינה");
+
+                var entity = _mapper.Map<Professionals>(professional);
+
+                if (professional.fileImages != null && professional.fileImages.Any())
+                {
+                    foreach (var formFile in professional.fileImages)
+                    {
+                        if (formFile.Length > 0)
+                        {
+                            using (var ms = new MemoryStream())
+                            {
+                                await formFile.CopyToAsync(ms);
+
+                                var image = new ProfessionalImages
+                                {
+                                    ImageData = ms.ToArray(),
+                                    FileName = formFile.FileName,
+                                    Professional = entity
+                                };
+
+                                entity.Images.Add(image);
+                            }
+                        }
+                    }
+                }
+
+                var added = await _professionalsRepository.AddItem(entity);
+                return _mapper.Map<ProfessionalsDto>(added);
+            }
+        }
     }
-}
+

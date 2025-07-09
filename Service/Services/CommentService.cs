@@ -40,10 +40,11 @@ namespace Service.Services
         }
 
         // הוספת יוזר חדש למערכת
-        public async Task <CommentDto> AddItem(CommentDto item)
+        public async Task <CommentDto> AddItem(CommentDto comment)
         {
+
             // ממפה את ה-DTO לאובייקט יוזר מסוג Entity
-            Comment c =await repository.AddItem(mapper.Map<CommentDto, Comment>(item));
+            Comment c =await repository.AddItem(mapper.Map<CommentDto, Comment>(comment));
 
             // מחזיר את היוזר החדש אחרי השמירה, במבנה DTO
             return mapper.Map<Comment, CommentDto>(c);
